@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PicLinks - Create Free Image Links</title>
+    <style>
+        /* Same CSS as before - no changes needed */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        /* Header Styles */
+        .header {
+            background: white;
+            border-bottom: 1px solid #e5e5e5;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: #ef4444;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 0.5rem;
+            color: white;
+        }
+
+        .logo-text .red { color: #ef4444; }
+        .logo-text .black { color: #000; }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-menu a {
+            text-decoration: none;
+            color: #666;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-menu a:hover {
+            color: #ef4444;
+        }
+
+        .login-btn {
+            background: #ef4444;
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background 0.3s;
+        }
+
+        .login-btn:hover {
+            background: #dc2626;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: #000;
+            color: white;
+            padding: 4rem 2rem;
+            text-align: center;
+        }
+
+        .hero-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            font-weight: bold;
+        }
+
+        .hero .highlight {
+            color: #ef4444;
+        }
+
+        .hero p {
+            color: #999;
+            margin-bottom: 3rem;
+            font-size: 1.1rem;
+        }
+
+        /* Form Styles */
+        .form-container {
+            background: #333;
+            padding: 2rem;
+            border-radius: 10px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: white;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            background: #555;
+            border: 1px solid #666;
+            border-radius: 5px;
+            color: white;
+            font-size: 1rem;
+        }
+
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: #999;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #ef4444;
+        }
+
+        .file-input {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .file-input input[type=file] {
+            position: absolute;
+            left: -9999px;
+        }
+
+        .file-input-label {
+            display: block;
+            padding: 0.75rem;
+            background: #555;
+            border: 1px solid #666;
+            border-radius: 5px;
+            cursor: pointer;
+            color: #999;
+            transition: background 0.3s;
+        }
+
+        .file-input-label:hover {
+            background: #666;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+
+        .btn {
+            padding: 0.75rem 2rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 1rem;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: #ef4444;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #dc2626;
+        }
+
+        .btn-success {
+            background: #22c55e;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #16a34a;
+        }
+
+        /* How it Works Section */
+        .how-it-works {
+            padding: 4rem 2rem;
+            background: #f9f9f9;
+        }
+
+        .how-it-works-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .how-it-works h2 {
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            font-weight: bold;
+        }
+
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .step {
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .step-image {
+            height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            color: white;
+        }
+
+        .step-1 .step-image { background: #ef4444; }
+        .step-2 .step-image { background: #fbbf24; }
+        .step-3 .step-image { background: #22c55e; }
+
+        .step-content {
+            background: #222;
+            color: white;
+            padding: 1.5rem;
+        }
+
+        .step-content h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .step-content p {
+            color: #ccc;
+            line-height: 1.6;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: none;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            .how-it-works h2 {
+                font-size: 2rem;
+            }
+        }
+
+        /* Success Message */
+        .success-message {
+            background: #22c55e;
+            color: white;
+            padding: 1rem;
+            border-radius: 5px;
+            margin-top: 1rem;
+            display: none;
+        }
+
+        .error-message {
+            background: #ef4444;
+            color: white;
+            padding: 1rem;
+            border-radius: 5px;
+            margin-top: 1rem;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="nav-container">
+            <div class="logo">
+                <div class="logo-icon">🔗</div>
+                <div class="logo-text">
+                    <span class="red">PIC</span><span class="black">LINKS</span>
+                </div>
+            </div>
+            <nav>
+                <ul class="nav-menu">
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#analytics">Link Analytics</a></li>
+                    <li><a href="#report">Report Link</a></li>
+                    <li><a href="#earn">Earn</a></li>
+                    <li><a href="#advertise">Advertise</a></li>
+                    <li><a href="#important">Important Links ▼</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </nav>
+            <button class="login-btn">Login</button>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-container">
+            <h1>Create free <span class="highlight">Image Links</span>.</h1>
+            <p>Use 1280 by 720 image for better results. (youtube thumbnail size)</p>
+
+            <div class="form-container">
+                <form id="linkForm">
+                    <div class="form-group">
+                        <label for="imageUpload">Upload Image:</label>
+                        <div class="file-input">
+                            <input type="file" id="imageUpload" accept="image/*" required>
+                            <label for="imageUpload" class="file-input-label" id="fileLabel">Choose File</label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="destinationUrl">Destination URL:</label>
+                        <input type="url" id="destinationUrl" placeholder="http:// or https://" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="description">Description:</label>
+                        <textarea id="description" rows="3" placeholder="Enter description..."></textarea>
+                    </div>
+
+                    <div class="button-group">
+                        <button type="submit" class="btn btn-primary">
+                            🔗 Create Link
+                        </button>
+                        <button type="button" class="btn btn-success" onclick="showAnalytics()">
+                            📊 Analytics
+                        </button>
+                    </div>
+
+                    <div id="successMessage" class="success-message"></div>
+                    <div id="errorMessage" class="error-message"></div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- How it Works Section -->
+    <section class="how-it-works">
+        <div class="how-it-works-container">
+            <h2>How does it <span class="highlight">Work?</span></h2>
+            
+            <div class="steps">
+                <div class="step step-1">
+                    <div class="step-image">📷➡️🔗</div>
+                    <div class="step-content">
+                        <h3>Step 1</h3>
+                        <p>Create image link by adding image and a destination url for the image.</p>
+                    </div>
+                </div>
+
+                <div class="step step-2">
+                    <div class="step-image">📱💬🌐</div>
+                    <div class="step-content">
+                        <h3>Step 2</h3>
+                        <p>Post image on social networks or chat applications like FB, X, Telegram etc.</p>
+                    </div>
+                </div>
+
+                <div class="step step-3">
+                    <div class="step-image">📈👥✨</div>
+                    <div class="step-content">
+                        <h3>Step 3</h3>
+                        <p>Enjoy the unlimited high quality social traffic on your destination URL.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // ⭐ YAHAN APNA MAIN URL ADD KARO ⭐
+        const MAIN_SITE_URL = 'https://yoursite.com'; // 👈 Yahan apna domain add karo
+        
+        // File upload handling
+        document.getElementById('imageUpload').addEventListener('change', function(e) {
+            const fileLabel = document.getElementById('fileLabel');
+            if (e.target.files.length > 0) {
+                fileLabel.textContent = e.target.files[0].name;
+                fileLabel.style.color = '#22c55e';
+            } else {
+                fileLabel.textContent = 'Choose File';
+                fileLabel.style.color = '#999';
+            }
+        });
+
+        // Form submission
+        document.getElementById('linkForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const imageFile = document.getElementById('imageUpload').files[0];
+            const destinationUrl = document.getElementById('destinationUrl').value;
+            const description = document.getElementById('description').value;
+            
+            const successMessage = document.getElementById('successMessage');
+            const errorMessage = document.getElementById('errorMessage');
+            
+            // Hide previous messages
+            successMessage.style.display = 'none';
+            errorMessage.style.display = 'none';
+            
+            // Basic validation
+            if (!imageFile) {
+                showError('Please select an image file.');
+                return;
+            }
+            
+            if (!destinationUrl) {
+                showError('Please enter a destination URL.');
+                return;
+            }
+            
+            // Simulate link creation
+            setTimeout(() => {
+                const linkId = Math.random().toString(36).substr(2, 9);
+                // ⭐ YAHAN APKA URL USE HOGA ⭐
+                const generatedLink = `${MAIN_SITE_URL}/link/${linkId}`; // 👈 Yahan apka domain use hoga
+                
+                showSuccess(`Link created successfully! Your image link: ${generatedLink}`);
+                
+                // Reset form
+                document.getElementById('linkForm').reset();
+                document.getElementById('fileLabel').textContent = 'Choose File';
+                document.getElementById('fileLabel').style.color = '#999';
+            }, 1000);
+        });
+
+        function showSuccess(message) {
+            const successMessage = document.getElementById('successMessage');
+            successMessage.textContent = message;
+            successMessage.style.display = 'block';
+        }
+
+        function showError(message) {
+            const errorMessage = document.getElementById('errorMessage');
+            errorMessage.textContent = message;
+            errorMessage.style.display = 'block';
+        }
+
+        function showAnalytics() {
+            // ⭐ ANALYTICS PAGE KA URL ⭐
+            window.open(`${MAIN_SITE_URL}/analytics`, '_blank'); // 👈 Analytics page ka URL
+        }
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Login button functionality
+        document.querySelector('.login-btn').addEventListener('click', function() {
+            // ⭐ LOGIN PAGE KA URL ⭐
+            window.location.href = `${MAIN_SITE_URL}/login`; // 👈 Login page ka URL
+        });
+
+        // Navigation links ke liye URLs
+        document.addEventListener('DOMContentLoaded', function() {
+            // ⭐ NAVIGATION LINKS KE URLs ⭐
+            const navLinks = {
+                'analytics': `${MAIN_SITE_URL}/analytics`,
+                'report': `${MAIN_SITE_URL}/report`,
+                'earn': `${MAIN_SITE_URL}/earn`,
+                'advertise': `${MAIN_SITE_URL}/advertise`,
+                'important': `${MAIN_SITE_URL}/important-links`,
+                'contact': `${MAIN_SITE_URL}/contact`
+            };
+
+            // Update navigation links
+            Object.keys(navLinks).forEach(key => {
+                const link = document.querySelector(`a[href="#${key}"]`);
+                if (link && key !== 'home') {
+                    link.href = navLinks[key];
+                    link.target = '_blank'; // New tab mein open karo
+                }
+            });
+        });
+    </script>
+</body>
+</html>
